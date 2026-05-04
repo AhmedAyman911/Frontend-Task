@@ -3,8 +3,8 @@ import Image from "next/image";
 export default function PhotoCard() {
     return (
         <div
-            className="card border-0 rounded-4 overflow-hidden"
-            style={{ width: "420px", height: "150px" }}
+            className="card border-0 rounded-5 overflow-hidden shadow-md w-100"
+            style={{ height: "150px" }}
         >
             <Image
                 src="/shoes.jpg"

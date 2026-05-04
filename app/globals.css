@@ -47,3 +47,7 @@ a {
     color-scheme: dark;
   }
 }
+
+.bg-dashboard {
+  background-color: #f3f4f8;
+}
