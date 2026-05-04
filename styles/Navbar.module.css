@@ -1,0 +1,138 @@
+.navbar {
+  background: #f3f4f8;
+  border-bottom: 1px solid #e8e9f0;
+  left: 64px;
+  height: 64px;
+  right: 0;
+  z-index: 99;
+}
+
+@media (max-width: 768px) {
+  .navbar { left: 0; }
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: -0.3px;
+  text-decoration: none;
+}
+
+.brand:hover { color: #1a1a2e; }
+
+.pill {
+  background: #ffffff;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  color: #6b7280;
+  transition: box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.pill:hover {
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+  color: #3b82f6;
+}
+
+.iconBtn {
+  width: 42px;
+  height: 42px;
+}
+
+@media (max-width: 768px) {
+  .iconBtn { width: 36px; height: 36px; }
+}
+
+.badge {
+  width: 14px;
+  height: 14px;
+  background: #3b82f6;
+  border: 2.5px solid #f3f4f8;
+  border-radius: 50%;
+  top: -3px;
+  right: -3px;
+}
+
+.langToggle {
+  height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #000 !important;
+  background: #fff !important;
+  border: none !important;
+  border-radius: 50px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.langToggle::after { display: none !important; }
+
+.langToggle:hover,
+.langToggle:focus,
+.langToggle:active,
+.langToggle:global(.show) {
+  color: #3b82f6 !important;
+  box-shadow: 0 4px 12px rgba(20, 70, 229, 0.15) !important;
+  background: #fff !important;
+}
+
+@media (max-width: 768px) {
+  .langToggle { height: 36px; font-size: 12px; }
+}
+
+.langMenu {
+  border-radius: 12px !important;
+  border: 1.5px solid #ececf5 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09) !important;
+  padding: 4px !important;
+  min-width: 120px !important;
+}
+
+.langItem {
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  color: #808080 !important;
+}
+
+.langItem:hover,
+.langItem:focus {
+  background: #f5f5ff !important;
+  color: #3b82f6 !important;
+}
+
+.langItem:global(.active) {
+  background: #eff0ff !important;
+  color: #3b82f6 !important;
+}
+
+.langDot {
+  width: 6px;
+  height: 6px;
+  background: #3b82f6;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: #3b82f6;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.15s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.avatar:hover {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+@media (max-width: 768px) {
+  .avatar { width: 36px; height: 36px; font-size: 12px; }
+}
