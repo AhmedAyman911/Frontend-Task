@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import PhotoCard from "@/components/PhotoCard";
 import ScheduleCard from "@/components/ScheduleCard";
 import StatsCard from "@/components/StatsCard";
+import StoreCard from "@/components/StoreCard";
 
 
 export default function Home() {
@@ -67,6 +68,21 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <div className="row px-5 g-3">
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <StoreCard title="New York" />
+        </div>
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <StoreCard title="Los Angeles"/>
+        </div>
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+          <StoreCard title="Chicago" />
+        </div>
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+         <StoreCard title="Houston" />
         </div>
       </div>
 
