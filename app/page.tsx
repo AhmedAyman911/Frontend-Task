@@ -1,8 +1,10 @@
 import SalesBarChart from "@/charts/BarChart";
 import OrdersHeatmap from "@/charts/HeatMap";
 import TransactionsChart from "@/charts/LineChart";
+import ConversionRate from "@/components/ConversionRate";
 import Header from "@/components/Header";
 import PhotoCard from "@/components/PhotoCard";
+import ProductList from "@/components/ProductList";
 import ScheduleCard from "@/components/ScheduleCard";
 import StatsCard from "@/components/StatsCard";
 import StoreCard from "@/components/StoreCard";
@@ -76,16 +78,29 @@ export default function Home() {
           <StoreCard title="New York" />
         </div>
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StoreCard title="Los Angeles"/>
+          <StoreCard title="Los Angeles" />
         </div>
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
           <StoreCard title="Chicago" />
         </div>
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-         <StoreCard title="Houston" />
+          <StoreCard title="Houston" />
         </div>
       </div>
 
+      <div className="px-5 py-3">
+        <div className="card rounded-5 border-0">
+          <span className="px-4 mt-4 fw-bold" style={{ fontSize: 21, color: "#1a1a1a" }}> Product List</span>
+          <div className="row p-3">
+            <div className="col-12 col-sm-6 col-md-3 col-lg-9">
+              <ProductList />
+            </div>
+            <div className="col-12 col-sm-6 col-md-3 col-lg-3 py-3 py-lg-0">
+              <ConversionRate />
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   );
