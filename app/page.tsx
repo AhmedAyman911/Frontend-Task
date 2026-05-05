@@ -1,5 +1,9 @@
+import SalesBarChart from "@/charts/BarChart";
+import OrdersHeatmap from "@/charts/HeatMap";
+import TransactionsChart from "@/charts/LineChart";
 import Header from "@/components/Header";
 import PhotoCard from "@/components/PhotoCard";
+import ScheduleCard from "@/components/ScheduleCard";
 import StatsCard from "@/components/StatsCard";
 
 
@@ -30,10 +34,10 @@ export default function Home() {
             isIncrease={false}
             period="From Jan 01, 2025 - March 30, 2024"
           />
-          
+
         </div>
         <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          
+
           <StatsCard
             title="Total Orders"
             value="19,744"
@@ -44,6 +48,29 @@ export default function Home() {
           />
         </div>
       </div>
+
+
+      <div className="px-5 py-3">
+        <div className="row g-3">
+          <div className="col-lg-9">
+            <div className="row g-3">
+              <div className="col-md-6"><TransactionsChart /></div>
+              <div className="col-md-6"><SalesBarChart title="Sales Performance" /></div>
+              <div className="col-md-6"><OrdersHeatmap /></div>
+              <div className="col-md-6"><SalesBarChart title="Product Statistics" /></div>
+            </div>
+          </div>
+
+          <div className="col-lg-3 d-flex">
+            <div className="w-100 h-100">
+              <ScheduleCard />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
     </div>
   );
 }
