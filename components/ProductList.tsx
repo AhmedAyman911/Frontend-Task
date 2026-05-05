@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, RefreshCw, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
-
 
 interface Product {
     id: string;
@@ -17,81 +16,41 @@ interface Product {
     active: boolean;
 }
 
-const MOCK_PRODUCTS: Product[] = [
-    {
-        id: '1',
-        name: 'Liam Anderson Red',
-        status: 'In Stock',
-        imageUrl: '/1.jpg',
-        revenue: 1240.22,
-        sales: 1909,
-        reviews: 2102,
-        views: 3022,
-        active: true,
-    },
-    {
-        id: '2',
-        name: 'Ava Reynolds Blue',
-        status: 'In Stock',
-        imageUrl: '/2.jpg',
-        revenue: 1240.22,
-        sales: 1909,
-        reviews: 2102,
-        views: 3022,
-        active: true,
-    },
-    {
-        id: '3',
-        name: 'Jackson White Blue',
-        status: 'In Stock',
-        imageUrl: '/1.jpg',
-        revenue: 1240.22,
-        sales: 1909,
-        reviews: 2102,
-        views: 3022,
-        active: true,
-    },
-    {
-        id: '4',
-        name: 'Bennett Reynolds Blue',
-        status: 'In Stock',
-        imageUrl: '/1.jpg',
-        revenue: 1240.22,
-        sales: 1909,
-        reviews: 2102,
-        views: 3022,
-        active: true,
-    },
-    {
-        id: '5',
-        name: 'Run Reynolds Blue',
-        status: 'In Stock',
-        imageUrl: '/2.jpg',
-        revenue: 1240.22,
-        sales: 1909,
-        reviews: 2102,
-        views: 3022,
-        active: true,
-    },
-];
-
-
 interface ProductListProps {
-    products?: Product[];
     totalItems?: number;
     growthPercent?: number;
 }
 
-const ProductList: React.FC<ProductListProps> = ({
-    products = MOCK_PRODUCTS,
+export default function ProductList({
     totalItems = 3280,
     growthPercent = 8.33,
-}) => {
+}: ProductListProps) {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
-    const [activeToggles, setActiveToggles] = useState<Record<string, boolean>>(
-        Object.fromEntries(products.map((p) => [p.id, p.active]))
-    );
+    const [activeToggles, setActiveToggles] = useState<Record<string, boolean>>({});
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const res = await fetch('/api/products');
+                if (!res.ok) throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+                const data: Product[] = await res.json();
+                setProducts(data);
+                setActiveToggles(Object.fromEntries(data.map((p) => [p.id, p.active])));
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Unknown error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const toggleSelectAll = () => {
         if (selectedIds.size === products.length) {
@@ -103,13 +62,11 @@ const ProductList: React.FC<ProductListProps> = ({
 
     const toggleSelect = (id: string) => {
         const next = new Set(selectedIds);
-
         if (next.has(id)) {
             next.delete(id);
         } else {
             next.add(id);
         }
-
         setSelectedIds(next);
     };
 
@@ -168,117 +125,135 @@ const ProductList: React.FC<ProductListProps> = ({
                 </div>
             </div>
 
-            <div className="table-responsive">
-                <table className="table table-hover mb-0 align-middle" style={{ fontSize: '14px' }}>
-                    <thead style={{ background: '#F9FAFB' }}>
-                        <tr>
-                            <th className="ps-4 pe-2 py-3 border-0" style={{ width: 40 }}>
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    checked={selectedIds.size === products.length && products.length > 0}
-                                    onChange={toggleSelectAll}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                            </th>
-                            <th className="ps-2 py-3 border-0 text-muted fw-semibold" style={{ minWidth: 100 }}>
-                                Product Name
-                            </th>
-                            <th className="py-3 border-0 text-muted fw-semibold">Revenue</th>
-                            <th className="py-3 border-0 text-muted fw-semibold">Sales</th>
-                            <th className="py-3 border-0 text-muted fw-semibold">Reviews</th>
-                            <th className="py-3 border-0 text-muted fw-semibold">Views</th>
-                            <th className="pe-4 py-3 border-0 text-muted fw-semibold" style={{ width: 1 }}>Active</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredProducts.map((product) => (
-                            <tr
-                                key={product.id}
-                                style={{
-                                    background: selectedIds.has(product.id) ? '#EFF6FF' : 'transparent',
-                                    transition: 'background 0.15s',
-                                }}
-                            >
-                                <td className="ps-4 pe-2 border-0">
+            {loading && (
+                <div className="text-center py-5 text-muted" style={{ fontSize: '14px' }}>
+                    <div className="spinner-border spinner-border-sm me-2" role="status" />
+                    Loading products...
+                </div>
+            )}
+
+            {error && !loading && (
+                <div className="text-center py-5" style={{ fontSize: '14px', color: '#EF4444' }}>
+                    Failed to load products: {error}
+                </div>
+            )}
+
+            {!loading && !error && (
+                <div className="table-responsive">
+                    <table className="table table-hover mb-0 align-middle" style={{ fontSize: '14px' }}>
+                        <thead style={{ background: '#F9FAFB' }}>
+                            <tr>
+                                <th className="ps-4 pe-2 py-3 border-0" style={{ width: 40 }}>
                                     <input
                                         type="checkbox"
                                         className="form-check-input"
-                                        checked={selectedIds.has(product.id)}
-                                        onChange={() => toggleSelect(product.id)}
+                                        checked={selectedIds.size === products.length && products.length > 0}
+                                        onChange={toggleSelectAll}
                                         style={{ cursor: 'pointer' }}
                                     />
-                                </td>
-
-                                <td className="ps-2 border-0">
-                                    <div className="d-flex align-items-center gap-3">
-                                        <div
-                                            className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
-                                            style={{
-                                                width: 46,
-                                                height: 46,
-                                            }}
-                                        >
-                                            <Image
-                                                src={product.imageUrl}
-                                                alt="card"
-                                                width={32}
-                                                height={32}
-                                                style={{ objectFit: "cover" }}
-                                                loading="eager"
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="fw-semibold" style={{ color: '#111827' }}>
-                                                {product.name}
-                                            </div>
-                                            <div style={{ fontSize: '12px', color: '#6B7280' }}>{product.status}</div>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td className="border-0 fw-semibold" style={{ color: '#111827' }}>
-                                    ${product.revenue.toFixed(2)}
-                                </td>
-
-                                <td className="border-0 fw-semibold" style={{ color: '#111827' }}>
-                                    {product.sales.toLocaleString()}
-                                </td>
-
-                                <td className="border-0" style={{ color: '#6B7280' }}>
-                                    {product.reviews.toLocaleString()}
-                                </td>
-
-                                <td className="border-0" style={{ color: '#6B7280' }}>
-                                    {product.views.toLocaleString()}
-                                </td>
-
-                                <td className="border-0">
-                                    <div className="form-check form-switch mb-0">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            role="switch"
-                                            id={`switch-${product.id}`}
-                                            checked={activeToggles[product.id]}
-                                            onChange={() => toggleActive(product.id)}
-                                            style={{
-                                                width: '44px',
-                                                height: '24px',
-                                                cursor: 'pointer',
-                                                backgroundColor: activeToggles[product.id] ? '#3B82F6' : '#D1D5DB',
-                                                borderColor: activeToggles[product.id] ? '#3B82F6' : '#D1D5DB',
-                                            }}
-                                        />
-                                    </div>
-                                </td>
+                                </th>
+                                <th className="ps-2 py-3 border-0 text-muted fw-semibold" style={{ minWidth: 100 }}>
+                                    Product Name
+                                </th>
+                                <th className="py-3 border-0 text-muted fw-semibold">Revenue</th>
+                                <th className="py-3 border-0 text-muted fw-semibold">Sales</th>
+                                <th className="py-3 border-0 text-muted fw-semibold">Reviews</th>
+                                <th className="py-3 border-0 text-muted fw-semibold">Views</th>
+                                <th className="pe-4 py-3 border-0 text-muted fw-semibold" style={{ width: 1 }}>Active</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {filteredProducts.length === 0 ? (
+                                <tr>
+                                    <td colSpan={7} className="text-center py-5 text-muted border-0">
+                                        No products found.
+                                    </td>
+                                </tr>
+                            ) : (
+                                filteredProducts.map((product) => (
+                                    <tr
+                                        key={product.id}
+                                        style={{
+                                            background: selectedIds.has(product.id) ? '#EFF6FF' : 'transparent',
+                                            transition: 'background 0.15s',
+                                        }}
+                                    >
+                                        <td className="ps-4 pe-2 border-0">
+                                            <input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                checked={selectedIds.has(product.id)}
+                                                onChange={() => toggleSelect(product.id)}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        </td>
+
+                                        <td className="ps-2 border-0">
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div
+                                                    className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                                                    style={{ width: 46, height: 46 }}
+                                                >
+                                                    <Image
+                                                        src={product.imageUrl}
+                                                        alt={product.name}
+                                                        width={32}
+                                                        height={32}
+                                                        style={{ objectFit: 'cover' }}
+                                                        loading="eager"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <div className="fw-semibold" style={{ color: '#111827' }}>
+                                                        {product.name}
+                                                    </div>
+                                                    <div style={{ fontSize: '12px', color: '#6B7280' }}>{product.status}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className="border-0 fw-semibold" style={{ color: '#111827' }}>
+                                            ${product.revenue.toFixed(2)}
+                                        </td>
+
+                                        <td className="border-0 fw-semibold" style={{ color: '#111827' }}>
+                                            {product.sales.toLocaleString()}
+                                        </td>
+
+                                        <td className="border-0" style={{ color: '#6B7280' }}>
+                                            {product.reviews.toLocaleString()}
+                                        </td>
+
+                                        <td className="border-0" style={{ color: '#6B7280' }}>
+                                            {product.views.toLocaleString()}
+                                        </td>
+
+                                        <td className="border-0">
+                                            <div className="form-check form-switch mb-0">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    id={`switch-${product.id}`}
+                                                    checked={activeToggles[product.id] ?? false}
+                                                    onChange={() => toggleActive(product.id)}
+                                                    style={{
+                                                        width: '44px',
+                                                        height: '24px',
+                                                        cursor: 'pointer',
+                                                        backgroundColor: activeToggles[product.id] ? '#3B82F6' : '#D1D5DB',
+                                                        borderColor: activeToggles[product.id] ? '#3B82F6' : '#D1D5DB',
+                                                    }}
+                                                />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
-};
-
-export default ProductList;
+}
