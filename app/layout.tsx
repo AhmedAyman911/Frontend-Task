@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import BootstrapClient from "./BootstrapClient";
-import Sidebar from "@/components/SideBar";
-import Navbar from "@/components/navbar";
+import { AuthProvider } from '@/context/AuthContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,20 +21,16 @@ export const metadata: Metadata = {
 };
 
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <BootstrapClient />
-        <Sidebar />
-        <Navbar />
-        <main className="pt-5 pt-lg-5 ps-2 ps-md-4 ps-lg-5 min-vh-100 bg-dashboard">
+        <AuthProvider>
           {children}
-        </main>
+        </AuthProvider>
       </body>
     </html>
   );

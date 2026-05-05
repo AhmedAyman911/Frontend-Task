@@ -1,107 +1,68 @@
-import SalesBarChart from "@/charts/BarChart";
-import OrdersHeatmap from "@/charts/HeatMap";
-import TransactionsChart from "@/charts/LineChart";
-import ConversionRate from "@/components/ConversionRate";
-import Header from "@/components/Header";
-import PhotoCard from "@/components/PhotoCard";
-import ProductList from "@/components/ProductList";
-import ScheduleCard from "@/components/ScheduleCard";
-import StatsCard from "@/components/StatsCard";
-import StoreCard from "@/components/StoreCard";
+'use client';
 
+import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
-export default function Home() {
-  return (
-    <div className="">
-      <Header />
-      <div className="row px-5 g-3">
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <PhotoCard />
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StatsCard
-            title="Total Revenue"
-            value="4,547"
-            decimal="08"
-            change={12.5}
-            isIncrease={true}
-            period="From Jan 01, 2025 - March 30, 2024"
-          />
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StatsCard
-            title="Avg. Order Value"
-            value="1,230"
-            decimal="58"
-            change={8.2}
-            isIncrease={false}
-            period="From Jan 01, 2025 - March 30, 2024"
-          />
+export default function LoginPage() {
+    const { login } = useAuth();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        const ok = login(username, password);
+        if (!ok) setError('Invalid credentials');
+    };
 
-          <StatsCard
-            title="Total Orders"
-            value="19,744"
-            decimal="49"
-            change={47.5}
-            isIncrease={true}
-            period="From Jan 01, 2025 - March 30, 2024"
-          />
-        </div>
-      </div>
+    return (
+        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+            <div className="card shadow-sm border-0 rounded-4 p-4" style={{ width: 380 }}>
+                
+                <div className="text-center mb-4">
+                    <h4 className="fw-bold mb-1">Welcome Back</h4>
+                    <p className="text-muted mb-0" style={{ fontSize: '14px' }}>
+                        Please login to your account
+                    </p>
+                </div>
 
+                {error && (
+                    <div className="alert alert-danger py-2 text-center" style={{ fontSize: '14px' }}>
+                        {error}
+                    </div>
+                )}
 
-      <div className="px-5 py-3">
-        <div className="row g-3">
-          <div className="col-lg-9">
-            <div className="row g-3">
-              <div className="col-md-6"><TransactionsChart /></div>
-              <div className="col-md-6"><SalesBarChart title="Sales Performance" /></div>
-              <div className="col-md-6"><OrdersHeatmap /></div>
-              <div className="col-md-6"><SalesBarChart title="Product Statistics" /></div>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label small text-muted">Username</label>
+                        <input
+                            className="form-control rounded-3"
+                            placeholder="Enter username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="form-label small text-muted">Password</label>
+                        <input
+                            type="password"
+                            className="form-control rounded-3"
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        className="btn btn-primary w-100 rounded-3 fw-semibold"
+                        type="submit"
+                    >
+                        Login
+                    </button>
+                </form>
             </div>
-          </div>
-
-          <div className="col-lg-3 d-flex">
-            <div className="w-100 h-100">
-              <ScheduleCard />
-            </div>
-          </div>
-
         </div>
-      </div>
-
-      <div className="row px-5 g-3">
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StoreCard title="New York" />
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StoreCard title="Los Angeles" />
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StoreCard title="Chicago" />
-        </div>
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-          <StoreCard title="Houston" />
-        </div>
-      </div>
-
-      <div className="px-5 py-3">
-        <div className="card rounded-5 border-0">
-          <span className="px-4 mt-4 fw-bold" style={{ fontSize: 21, color: "#1a1a1a" }}> Product List</span>
-          <div className="row p-3">
-            <div className="col-12 col-sm-6 col-md-3 col-lg-9">
-              <ProductList />
-            </div>
-            <div className="col-12 col-sm-6 col-md-3 col-lg-3 py-3 py-lg-0">
-              <ConversionRate />
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  );
+    );
 }
