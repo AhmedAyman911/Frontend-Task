@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const members = [
     { src: "https://i.pravatar.cc/40?img=11", alt: "Member 1" },
@@ -16,6 +17,7 @@ export default function StoreCard({title}:{title:string}) {
                 <h6 className="mb-0 fw-bold" style={{ fontSize: 21, color: "#1a1a1a" }}>
                     {title} Store
                 </h6>
+                <Link href={'/details'}>
                 <button
                     className="btn btn-link p-0 text-decoration-none d-flex align-items-center gap-1"
                     style={{ fontSize: 13, color: "#3b6fd4" }}
@@ -23,6 +25,8 @@ export default function StoreCard({title}:{title:string}) {
                     See More
                     <ChevronRight size={14} />
                 </button>
+                </Link>
+                
             </div>
 
             <div className="d-flex align-items-center justify-content-between">
