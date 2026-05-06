@@ -5,7 +5,15 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
    images: {
     domains: ["i.pravatar.cc"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+    unoptimized: true,
   },
+  output: "standalone",
 };
 
 export default nextConfig;
