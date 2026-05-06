@@ -9,13 +9,13 @@ export default function Navbar() {
   const [lang, setLang] = useState("EN");
 
    return (
-    <header className={`${styles.navbar} navbar fixed-top px-3 px-md-4`}>
+    <header className={`${styles.navbar} navbar fixed-top px-3 px-md-4 border-0`}>
  
-      <Link href="/dashboard" className={`${styles.brand} me-auto`}>
+      <Link href="/dashboard" className={`${styles.brand}  d-none d-md-block`}>
         Dashboard
       </Link>
  
-      <div className="d-flex align-items-center gap-2 gap-md-3">
+      <div className="d-flex align-items-center gap-2 gap-md-3 ms-auto">
  
         <div className="dropdown">
           <button

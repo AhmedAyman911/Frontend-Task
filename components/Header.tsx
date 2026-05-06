@@ -32,7 +32,7 @@ export default function Header() {
           <Calendar size={16} className="text-muted me-2" />
         </div>
         
-        <button className="btn border rounded-pill d-flex align-items-center gap-2 px-3">
+        <button className="btn border btn-light rounded-pill d-flex align-items-center gap-2 px-3">
           Export Document
           <FolderInput  size={16} />
         </button>

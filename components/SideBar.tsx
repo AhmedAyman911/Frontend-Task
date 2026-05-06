@@ -70,7 +70,7 @@ export default function Sidebar() {
   return (
     <>
       <button
-        className={`${styles.menuBtn} d-flex align-items-center justify-content-center`}
+        className={`${styles.menuBtn} d-flex align-items-center justify-content-center border-0`}
         onClick={() => setOpen(true)}
         aria-label="Open menu"
       >
